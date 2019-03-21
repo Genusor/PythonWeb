@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+body{
+    background-color: indigo;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+img {
+    border-radius: 50%;
+}
+.btn-primary {
+    background-color: darkmagenta;
+}
+.col-3 {
+    background-color: blueviolet;
+    padding: 1em;
+    border-radius: 5%
+}
