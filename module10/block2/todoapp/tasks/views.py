@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from tasks.models import TodoItem
-from tasks.forms import AddTaskForm
+from tasks.forms import TodoItemForm
 
 def index(request):
     return HttpResponse("Примитивный ответ из приложения tasks")
@@ -16,15 +16,12 @@ def delete_task(request, uid):
 
 def task_create(request):
     if request.method == "POST":
-        form = AddTaskForm(request.POST)
+        form = TodoItemForm(request.POST)
         if form.is_valid():
-            cd = form.cleaned_data
-            desc = cd["description"]
-            t = TodoItem(description=desc)
-            t.save()
+            form.save()
             return redirect("/tasks/list")
     else:
-        form = AddTaskForm()
+        form = TodoItemForm()
     return render(request, "tasks/create.html", {"form": form})
 
 def tasks_list(request):
