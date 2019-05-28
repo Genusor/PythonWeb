@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
 
+from django.views.generic.detail import DetailView
 from tasks.forms import AddTaskForm, TodoItemForm
 from tasks.models import TodoItem
 
@@ -50,3 +51,6 @@ class TaskCreateView(View):
     def get(self, request, *args, **kwargs):
         form = TodoItemForm()
         return render(request, "tasks/create.html", {"form": form})
+class TaskDetailsView(DetailView):
+    model = TodoItem
+    template_name = 'tasks/details.html'
