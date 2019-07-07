@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\Genusor\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
+    "python.pythonPath": "C:\\Users\\Genusor\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe",
+    "svn.ignoreMissingSvnWarning": true
 }
