@@ -132,10 +132,10 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 # Пароль лучше не светить если выкладываю в git:) 
-# EMAIL_HOST = 'smtp.yandex.ru'
+ EMAIL_HOST = os.environ.get("EMAIL_HOST")
 # EMAIL_HOST_USER = ''
 # EMAIL_HOST_PASSWORD = ""
-# EMAIL_PORT = 465
+ EMAIL_PORT = int(os.environ.get("EMAIL_PORT"))
 # EMAIL_USE_SSL = True
 
 #Флаг для отправки в консоль вместо почты

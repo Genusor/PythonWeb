@@ -17,9 +17,9 @@
             {% block side_bar %}
               {% if user.is_authenticated %}
                 <p>{{ user.first_name }}</p>
-                {% if user.profile.avatar %}
+                <!-- {% if user.profile.avatar %}
                   <img src="{{ user.profile.avatar.url }}" class="img-fluid">
-                {% endif %}
+                {% endif %} -->
                 <ul>
                   <li><a href="{% url "edit" %}">профиль</a></li>
                   <li><a href="{% url "tasks:create" %}">добавить задачу</a></li>
