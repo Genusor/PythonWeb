@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import django_heroku
 
-django_heroku.settings(locals())
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -132,12 +132,14 @@ LOGIN_REDIRECT_URL = "tasks:list"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
-# Пароль лучше не светить если выкладываю в git:) 
- EMAIL_HOST = os.environ.get("EMAIL_HOST")
-# EMAIL_HOST_USER = ''
-# EMAIL_HOST_PASSWORD = ""
- EMAIL_PORT = int(os.environ.get("EMAIL_PORT"))
-# EMAIL_USE_SSL = True
-
+# Пароль лучше не светить 
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT"))
+EMAIL_USE_SSL = bool(os.environ.get("EMAIL_USE_SSL"))
 #Флаг для отправки в консоль вместо почты
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+django_heroku.settings(locals())
