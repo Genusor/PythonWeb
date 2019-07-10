@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
-
+from taggit.managers import TaggableManager
+from todoapp.ru_taggit import RuTaggedItem
 
 class TodoItem(models.Model):
     PRIORITY_HIGH = 1
@@ -13,6 +14,8 @@ class TodoItem(models.Model):
         (PRIORITY_MEDIUM, "Средний приоритет"),
         (PRIORITY_LOW, "Низкий приоритет"),
     ]
+
+    tags = TaggableManager(through=RuTaggedItem)
 
     description = models.CharField(max_length=64)
     is_completed = models.BooleanField("выполнено", default=False)

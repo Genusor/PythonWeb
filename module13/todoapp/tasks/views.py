@@ -5,14 +5,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from tasks.forms import AddTaskForm, TodoItemExportForm, TodoItemForm
 from tasks.models import TodoItem
-
+from taggit.models import Tag
 
 @login_required
 def index(request):
@@ -39,6 +39,27 @@ def delete_task(request, uid):
     t.delete()
     return redirect(reverse("tasks:list"))
 
+def tasks_by_tag(request, tag_slug=None):
+    u = request.user
+    tasks = TodoItem.objects.filter(owner=u).all()
+
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        tasks = tasks.filter(tags__in=[tag])
+
+    all_tags = []
+    for t in tasks:
+        all_tags.append(list(t.tags.all()))
+    all_tags = filter_tags(all_tags)
+
+    return render(
+        request,
+        "tasks/list_by_tag.html",
+        {"tag": tag, "tasks": tasks, "all_tags": all_tags},
+    )
+
+
 
 class TaskListView(LoginRequiredMixin, ListView):
     model = TodoItem
@@ -49,6 +70,27 @@ class TaskListView(LoginRequiredMixin, ListView):
         u = self.request.user
         qs = super().get_queryset()
         return qs.filter(owner=u)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_tasks = self.get_queryset()
+        tags = []
+        for t in user_tasks:
+            tags.append(list(t.tags.all()))
+
+        context['tags'] = filter_tags(tags)
+
+        return context
+
+
+def filter_tags(tags_by_task):
+  buff=[]
+  for elem in tags_by_task:
+      for i in elem:
+          if not i in buff:
+            buff.append(i)
+  return buff 
 
 
 class TaskCreateView(LoginRequiredMixin, View):
@@ -58,6 +100,7 @@ class TaskCreateView(LoginRequiredMixin, View):
             new_task = form.save(commit=False)
             new_task.owner = request.user
             new_task.save()
+            form.save_m2m()
             return redirect(reverse("tasks:list"))
 
         return render(request, "tasks/create.html", {"form": form})
@@ -124,3 +167,5 @@ class TaskExportView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = TodoItemExportForm()
         return render(request, "tasks/export.html", {"form": form})
+
+
